@@ -1,0 +1,17 @@
+# Google GenAI for image captioning
+google-genai
+
+# AWS SDK for S3 operations
+boto3
+
+# Environment variables management
+python-dotenv
+
+# Image processing
+Pillow
+
+# Progress bars
+tqdm
+
+# Data validation
+pydantic
