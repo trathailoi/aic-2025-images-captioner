@@ -173,3 +173,23 @@ class S3Client:
         logging.info(f"Created summary file: distribution_summary.txt")
 
         return distribution_files
+
+    def download_image(self, s3_key: str, local_path: str) -> bool:
+        """Download an image from S3 to local file."""
+        try:
+            os.makedirs(os.path.dirname(local_path), exist_ok=True)
+            self.s3_client.download_file(self.bucket_name, s3_key, local_path)
+            return True
+        except ClientError as e:
+            logging.error(f"Error downloading {s3_key}: {e}")
+            return False
+
+    def upload_caption(self, local_file_path: str, s3_key: str) -> bool:
+        """Upload a caption file to S3."""
+        try:
+            self.s3_client.upload_file(local_file_path, self.bucket_name, s3_key)
+            logging.debug(f"Uploaded caption to S3: {s3_key}")
+            return True
+        except ClientError as e:
+            logging.error(f"Error uploading {s3_key}: {e}")
+            return False

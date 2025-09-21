@@ -13,8 +13,10 @@ load_dotenv()
 
 # Configure multiple GenAI API keys for rotation
 GENAI_API_KEYS = [
-    'AIzaSyCrrYXkgA5qfwyZkcA0QIbc4E6xNUdDr2A',
-    'AIzaSyApaw7U5O9VpepbbHOxwKwYJIf2-0KmwEs'
+    # 'AIzaSyCrrYXkgA5qfwyZkcA0QIbc4E6xNUdDr2A',
+    # 'AIzaSyApaw7U5O9VpepbbHOxwKwYJIf2-0KmwEs',
+    'AIzaSyCVXSEeslcOMbR-g-q4_8JvndaTcLwZe5M',
+    'AIzaSyAgrxrTAjyGf9s2HIuAWH1aDmTxBD-Y2Vg'
 ]
 
 # ==============================================================================
