@@ -41,6 +41,17 @@ def validate_api_keys():
         logging.error("No valid GenAI API keys found.")
         sys.exit(1)
 
+def is_error_response(caption):
+    """Check if the caption response is an error (JSON error format)."""
+    if not caption:
+        return True
+    try:
+        import json
+        parsed = json.loads(caption)
+        return 'error' in parsed
+    except (json.JSONDecodeError, TypeError):
+        return False
+
 def process_s3_worker_mode(worker_file_path, worker_id, checkpoint_file='checkpoint.pkl', 
                           max_workers=10, retry_errors=True, max_retries=5, key_rotation_delay=1.0):
     """Process images from S3 using worker assignment file."""
@@ -110,7 +121,8 @@ def process_s3_worker_mode(worker_file_path, worker_id, checkpoint_file='checkpo
                     # Process with Gemini
                     caption = gemini_client.process_image_with_gemini(temp_path)
                     
-                    if caption:
+                    # Check if caption is valid (not an error response)
+                    if caption and not is_error_response(caption):
                         # Upload caption to S3
                         caption_key = s3_client.get_caption_key_from_image_key(img_key)
                         
@@ -133,7 +145,10 @@ def process_s3_worker_mode(worker_file_path, worker_id, checkpoint_file='checkpo
                         # Clean up caption temp file
                         os.unlink(caption_temp_path)
                     else:
-                        logging.error(f"❌ Failed to generate caption for {img_key}")
+                        if caption:
+                            logging.error(f"❌ Failed to generate caption for {img_key}: {caption}")
+                        else:
+                            logging.error(f"❌ Failed to generate caption for {img_key}")
                     
                     # Clean up image temp file
                     os.unlink(temp_path)

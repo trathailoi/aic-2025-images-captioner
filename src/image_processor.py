@@ -46,8 +46,11 @@ class ImageProcessor:
             with open(output_path, 'w', encoding='utf-8') as f:
                 f.write(result)
 
-            # Update processed files tracking
-            if processed_files is not None:
+            # Check if final result has errors before marking as processed
+            has_errors = self.has_error_content(result)
+            
+            # Only mark as processed if there are no errors
+            if not has_errors and processed_files is not None:
                 from .config import INPUT_DIR
                 relative_path = os.path.relpath(input_path, INPUT_DIR)
                 with threading.Lock():
@@ -57,8 +60,8 @@ class ImageProcessor:
                         with open(checkpoint_file, 'wb') as f:
                             pickle.dump(processed_files, f)
 
-            # Check if final result still has errors
-            status = "❌ (still has errors)" if self.has_error_content(result) else "✅"
+            # Log status
+            status = "❌ (still has errors)" if has_errors else "✅"
             from .config import INPUT_DIR
             relative_path = os.path.relpath(input_path, INPUT_DIR)
             logging.info(f"Processed: {relative_path} [Key #{self.gemini_client.current_key_index + 1}] {status}")

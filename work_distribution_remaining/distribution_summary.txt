@@ -1,0 +1,10 @@
+# Work Distribution Summary
+# Total workers: 4
+# Total images: 181381
+# S3 Bucket: aic-2025-bucket
+# AWS Region: ap-southeast-1
+
+Worker 1: 45346 images (worker_1_images.txt)
+Worker 2: 45345 images (worker_2_images.txt)
+Worker 3: 45345 images (worker_3_images.txt)
+Worker 4: 45345 images (worker_4_images.txt)
